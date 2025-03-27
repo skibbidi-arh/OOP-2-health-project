@@ -7,13 +7,18 @@ public class BMIcalculator {
     private double bmi;  // Instance variable to store BMI value
 
     public void calculateBMI() {
-        // Create the frame
-        JFrame frame = new JFrame("BMI Calculator");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(350, 250);
-        frame.setLayout(new GridLayout(5, 2));
 
-        // Create components
+        JFrame frame = new JFrame("BMI Calculator");
+
+        frame.setSize(400, 300);
+        frame.setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+
+
+        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+
         JLabel heightFeetLabel = new JLabel("Height (feet):");
         JTextField heightFeetField = new JTextField();
         JLabel heightInchesLabel = new JLabel("Height (inches):");
@@ -24,16 +29,35 @@ public class BMIcalculator {
         JLabel resultLabel = new JLabel("Your BMI: ");
         JButton showpdf = new JButton("Get diet and exercise suggestions");
 
-        // Add components to frame
-        frame.add(heightFeetLabel);
-        frame.add(heightFeetField);
-        frame.add(heightInchesLabel);
-        frame.add(heightInchesField);
-        frame.add(weightLabel);
-        frame.add(weightField);
-        frame.add(calculateButton);
-        frame.add(resultLabel);
-        frame.add(showpdf);
+        // Style components
+        Font font = new Font("Arial", Font.BOLD, 14);
+        heightFeetLabel.setFont(font);
+        heightInchesLabel.setFont(font);
+        weightLabel.setFont(font);
+        resultLabel.setFont(font);
+
+        calculateButton.setBackground(new Color(76, 175, 80));
+        calculateButton.setForeground(Color.WHITE);
+        showpdf.setBackground(new Color(33, 150, 243));
+        showpdf.setForeground(Color.WHITE);
+
+        // Add components to input panel
+        inputPanel.add(heightFeetLabel);
+        inputPanel.add(heightFeetField);
+        inputPanel.add(heightInchesLabel);
+        inputPanel.add(heightInchesField);
+        inputPanel.add(weightLabel);
+        inputPanel.add(weightField);
+        inputPanel.add(calculateButton);
+        inputPanel.add(resultLabel);
+
+        // Create a panel for the suggestion button
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(showpdf);
+
+        // Add panels to frame
+        frame.add(inputPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
 
         // Action listener for the button
         calculateButton.addActionListener(new ActionListener() {
@@ -53,8 +77,8 @@ public class BMIcalculator {
                 }
             }
         });
-        showpdf.addActionListener(new ActionListener() {
 
+        showpdf.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 DietSuggestions ds = new DietSuggestions();
                 ds.pdf(bmi);
@@ -68,6 +92,4 @@ public class BMIcalculator {
     public double getBMI() {
         return bmi;
     }
-
-
 }

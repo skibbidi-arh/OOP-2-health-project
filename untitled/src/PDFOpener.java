@@ -5,7 +5,7 @@ import java.io.IOException;
 public class PDFOpener {
     public  void openPdf(String fileName) {
 
-       // String filePath = "example.pdf";
+
 
 
         File file = new File(fileName);
