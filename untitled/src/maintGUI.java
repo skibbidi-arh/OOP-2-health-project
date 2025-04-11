@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import medicine.*;
 
 public class maintGUI {
     public void show() {
@@ -25,7 +26,7 @@ public class maintGUI {
         JButton btn3 = new JButton("Exercise Timer");
         JButton btn4 = new JButton("Chatbot");
         JButton btn5 = new JButton("Calorie Tracker");
-        JButton btn6 = new JButton("Water Intake");
+        JButton btn6 = new JButton("Medicine List");
         JButton btn7 = new JButton("Sleep Tracker");
 
         Font buttonFont = new Font("Arial", Font.BOLD, 14);
@@ -93,6 +94,16 @@ public class maintGUI {
         btn5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 CalorieTracker cr = new CalorieTracker();
+
+            }
+        });
+
+
+        btn6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MedicineRepository repository = new MedicineRepository();
+                MedicineService service = new MedicineService(repository);
+                new MedicineReminderGUI(service).setVisible(true);
 
             }
         });
