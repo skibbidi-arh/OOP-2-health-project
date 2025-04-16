@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import medicine.*;
+import Checklist.*;
 
 public class maintGUI {
     public void show() {
@@ -73,8 +74,10 @@ public class maintGUI {
         });
 
         btn2.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                new TaskChecklist();
+                CheckList ck = new CheckList();
+                ck.lst();
             }
         });
 

@@ -112,7 +112,4 @@ public class Stopwatch implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        new Stopwatch();
-    }
 }

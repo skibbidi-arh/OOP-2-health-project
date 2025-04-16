@@ -14,7 +14,7 @@ public class TaskChecklist {
     public TaskChecklist() {
         JFrame frame = new JFrame("Task Checklist");
         frame.setSize(500, 500);
-      //  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(new Color(240, 248, 255));
 
