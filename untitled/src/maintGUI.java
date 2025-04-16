@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import medicine.*;
 import Checklist.*;
+import Gemini.*;
 
 public class maintGUI {
     public void show() {
@@ -60,7 +61,7 @@ public class maintGUI {
         panel.add(btn4);
         panel.add(btn5);
         panel.add(btn6);
-        panel.add(btn7);
+        //panel.add(btn7);
 
         frame.add(titleLabel, BorderLayout.NORTH);
         frame.add(panel, BorderLayout.CENTER);
@@ -90,7 +91,8 @@ public class maintGUI {
 
         btn4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new GPT();
+                GeminiGUI g = new GeminiGUI();
+                g.chat();
             }
         });
 
