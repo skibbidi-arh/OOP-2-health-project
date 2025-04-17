@@ -15,9 +15,9 @@ public class MedicineService {
         return new ArrayList<>(medicines);
     }
 
-    public boolean addMedicine(String name, List<String> times) {
+    public boolean addMedicine(String name, List<String> times, Set<String> weekdays) {
         if (findMedicineByName(name) != null) return false;
-        medicines.add(new Medicine(name, times));
+        medicines.add(new Medicine(name, times, weekdays));
         repository.saveMedicines(medicines);
         return true;
     }
@@ -34,5 +34,15 @@ public class MedicineService {
                 .filter(med -> med.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Medicine> getMedicinesForDay(String day) {
+        List<Medicine> filteredMedicines = new ArrayList<>();
+        for (Medicine med : medicines) {
+            if (med.getWeekdays().contains(day)) {
+                filteredMedicines.add(med);
+            }
+        }
+        return filteredMedicines;
     }
 }

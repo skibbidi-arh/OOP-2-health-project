@@ -4,11 +4,9 @@ import java.io.*;
 import java.util.*;
 
 public class MedicineRepository {
-    private final String fileName="medicines.txt";
+    private final String fileName = "medicines.txt";
 
-    public MedicineRepository() {
-
-    }
+    public MedicineRepository() {}
 
     public List<Medicine> loadMedicines() {
         List<Medicine> medicines = new ArrayList<>();

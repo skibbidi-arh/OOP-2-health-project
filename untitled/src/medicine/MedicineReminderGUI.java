@@ -10,13 +10,14 @@ public class MedicineReminderGUI extends JFrame {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final JList<String> medicineList = new JList<>(listModel);
     private final MedicineService service;
+    private final JComboBox<String> weekdaySelector = new JComboBox<>(
+            new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"});
 
     public MedicineReminderGUI(MedicineService service) {
         this.service = service;
 
         setTitle("💊 Medicine Reminder");
-        setSize(600, 450);
-
+        setSize(650, 500);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(15, 10));
         getContentPane().setBackground(new Color(245, 250, 255));
@@ -24,12 +25,18 @@ public class MedicineReminderGUI extends JFrame {
         initStyles();
         updateList();
 
-        // Create and style buttons
         JButton addButton = createStyledButton("➕ Add Medicine");
         JButton removeButton = createStyledButton("🗑 Remove Selected");
 
         addButton.addActionListener(e -> addMedicine());
         removeButton.addActionListener(e -> removeSelected());
+
+        weekdaySelector.addActionListener(e -> updateList());
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setBackground(new Color(245, 250, 255));
+        topPanel.add(new JLabel("Filter by Day: "));
+        topPanel.add(weekdaySelector);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(new Color(245, 250, 255));
@@ -39,6 +46,7 @@ public class MedicineReminderGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(medicineList);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Your Medicines"));
 
+        add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -58,15 +66,14 @@ public class MedicineReminderGUI extends JFrame {
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(0, 80, 180)),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 button.setBackground(new Color(0, 105, 230));
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 button.setBackground(new Color(0, 123, 255));
             }
         });
@@ -82,11 +89,21 @@ public class MedicineReminderGUI extends JFrame {
             return;
         }
 
-        String timesInput = JOptionPane.showInputDialog(this, "Enter times (comma-separated):\ne.g., 08:00 AM, 02:00 PM");
-        if (timesInput == null || timesInput.trim().isEmpty()) return;
+        JPanel panel = new JPanel(new GridLayout(3, 1));
+        JTextField timesField = new JTextField();
+        JTextField daysField = new JTextField();
+        panel.add(new JLabel("Enter times (comma-separated): e.g., 08:00 AM, 02:00 PM"));
+        panel.add(timesField);
+        panel.add(new JLabel("Enter days (comma-separated): e.g., Monday, Wednesday, Friday"));
+        panel.add(daysField);
 
-        List<String> times = Arrays.asList(timesInput.split("\\s*,\\s*"));
-        boolean added = service.addMedicine(name, times);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Medicine Details", JOptionPane.OK_CANCEL_OPTION);
+        if (result != JOptionPane.OK_OPTION) return;
+
+        List<String> times = Arrays.asList(timesField.getText().split("\\s*,\\s*"));
+        Set<String> days = new HashSet<>(Arrays.asList(daysField.getText().split("\\s*,\\s*")));
+
+        boolean added = service.addMedicine(name, times, days);
         if (added) updateList();
     }
 
@@ -99,16 +116,17 @@ public class MedicineReminderGUI extends JFrame {
 
     private void updateList() {
         listModel.clear();
+        String selectedDay = weekdaySelector.getSelectedItem().toString();
         for (Medicine med : service.getAllMedicines()) {
-            listModel.addElement("💊 " + med.toDisplayString());
+            if (med.getWeekdays().contains(selectedDay)) {
+                listModel.addElement( med.toDisplayString());
+            }
         }
     }
 
     public static void main(String[] args) {
-
-            MedicineRepository repository = new MedicineRepository();
-            MedicineService service = new MedicineService(repository);
-            new MedicineReminderGUI(service).setVisible(true);
-
+        MedicineRepository repository = new MedicineRepository();
+        MedicineService service = new MedicineService(repository);
+        new MedicineReminderGUI(service).setVisible(true);
     }
 }

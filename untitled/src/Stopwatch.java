@@ -55,7 +55,7 @@ public class Stopwatch implements ActionListener {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         buttonPanel.add(startButton);
         buttonPanel.add(resetButton);
-        buttonPanel.add(getButton);
+       // buttonPanel.add(getButton);
 
         startButton.addActionListener(this);
         resetButton.addActionListener(this);
